@@ -31,7 +31,7 @@ if __name__ == "__main__":
     args = ARGS(
         epochs=10,
         inp_size=64,
-        use_cuda=False,   # no CUDA on this machine; set True on the GPU instance
+        use_cuda=False,
         val_every=70,
         log_every=50,
         lr=1e-3,
