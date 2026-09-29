@@ -12,8 +12,12 @@ runs/
 
 # mAP evaluation tool, git-cloned in the Q3 setup step
 detection/mAP/
+detection/detection_logs/
 
 # Python / macOS cruft
 __pycache__/
 *.pyc
 .DS_Store
+q2_train.log
+runs_q2/
+tsne_features.npz
