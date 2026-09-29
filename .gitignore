@@ -13,6 +13,7 @@ runs/
 # mAP evaluation tool, git-cloned in the Q3 setup step
 detection/mAP/
 detection/detection_logs/
+detection/detection_logs_overfit/
 
 # Python / macOS cruft
 __pycache__/

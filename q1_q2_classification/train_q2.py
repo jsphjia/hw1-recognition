@@ -44,16 +44,6 @@ if __name__ == "__main__":
     # You should experiment and choose the correct hyperparameters
     # Aim for an mAP of around 0.8 (80%) in 50 epochs.
     ##################################################################
-    # args = ARGS(
-    #     epochs=50,
-    #     inp_size=64,
-    #     use_cuda=True,
-    #     val_every=70
-    #     lr=# TODO,
-    #     batch_size=#TODO,
-    #     step_size=#TODO,
-    #     gamma=#TODO
-    # )
     args = ARGS(
         epochs=50,
         inp_size=224,
@@ -65,7 +55,7 @@ if __name__ == "__main__":
         test_batch_size=128,
         step_size=10,
         gamma=0.5,
-        save_at_end=True,
+        save_at_end=True, # use to save model at end
     )
     ##################################################################
     #                          END OF YOUR CODE                      #
@@ -78,9 +68,7 @@ if __name__ == "__main__":
     # Initialize this model with ImageNet pre-trained weights
     # (except the last layer). You are free to use torchvision.models 
     ##################################################################
-
     model = ResNet(len(VOCDataset.CLASS_NAMES)).to(args.device)
-
     ##################################################################
     #                          END OF YOUR CODE                      #
     ##################################################################
