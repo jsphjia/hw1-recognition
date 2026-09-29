@@ -28,6 +28,17 @@ if __name__ == "__main__":
     #     step_size=#TODO,
     #     gamma=#TODO
     # )
+    args = ARGS(
+        epochs=10,
+        inp_size=64,
+        use_cuda=False,   # no CUDA on this machine; set True on the GPU instance
+        val_every=70,
+        log_every=50,
+        lr=1e-3,
+        batch_size=64,
+        step_size=4,
+        gamma=0.5,
+    )
     ##################################################################
     #                          END OF YOUR CODE                      #
     ##################################################################

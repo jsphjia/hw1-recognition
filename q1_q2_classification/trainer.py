@@ -53,7 +53,17 @@ def train(args, model, optimizer, scheduler=None, model_name='model'):
             # Function Outputs:
             #   - `output`: Computed loss, a single floating point number
             ##################################################################
-            loss = 0
+            # Numerically stable weighted binary cross entropy with logits.
+            # For a logit x and label y this is the standard identity
+            #     BCE(x, y) = max(x, 0) - x * y + log(1 + exp(-|x|))
+            # The max/abs form keeps the exponent negative, so exp() cannot
+            # overflow for large positive or negative logits.
+            bce = (torch.clamp(output, min=0) - output * target
+                   + torch.log1p(torch.exp(-torch.abs(output))))
+
+            # `wgt` is 0 for difficult classes, removing them from the loss.
+            # Average over the remaining valid (image, class) pairs.
+            loss = (bce * wgt).sum() / torch.clamp(wgt.sum(), min=1.0)
             ##################################################################
             #                          END OF YOUR CODE                      #
             ##################################################################

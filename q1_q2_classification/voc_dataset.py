@@ -72,6 +72,16 @@ class VOCDataset(Dataset):
             # The difficult attribute specifies whether a class is ambiguous and by setting its weight to zero it does not contribute to the loss during training 
             weight_vec = torch.ones(20)
 
+            # Each <object> tag holds one annotated instance: its <name> is the
+            # class string and <difficult> marks ambiguous instances.
+            for obj in tree.findall('object'):
+                cls_idx = self.INV_CLASS[obj.find('name').text.strip()]
+                class_vec[cls_idx] = 1
+
+                difficult = obj.find('difficult')
+                if difficult is not None and int(difficult.text) == 1:
+                    weight_vec[cls_idx] = 0
+
             ######################################################################
             #                            END OF YOUR CODE                        #
             ######################################################################
@@ -92,7 +102,26 @@ class VOCDataset(Dataset):
         # change and you will have to write the correct value of `flat_dim`
         # in line 46 in simple_cnn.py
         ######################################################################
-        pass
+        # Set NO_AUG=1 in the environment to disable augmentation; this makes
+        # the with/without-augmentation ablation a one-command change.
+        if os.environ.get('NO_AUG') == '1':
+            return []
+
+        # Only the training split is randomly augmented. For any other split the
+        # deterministic Resize already applied in `__getitem__` is the only
+        # spatial transform, which is the center-crop-style test behaviour.
+        if self.split != 'trainval':
+            return []
+
+        # RandomResizedCrop re-scales its crop back up to `self.size`, so the
+        # random crop does NOT change the final image size. That keeps
+        # `flat_dim` in simple_cnn.py a function of `inp_size` alone.
+        return [
+            transforms.RandomResizedCrop(self.size, scale=(0.7, 1.0)),
+            transforms.RandomHorizontalFlip(),
+            transforms.ColorJitter(brightness=0.2, contrast=0.2,
+                                   saturation=0.2, hue=0.05),
+        ]
         ######################################################################
         #                            END OF YOUR CODE                        #
         ######################################################################
