@@ -72,14 +72,13 @@ class VOCDataset(Dataset):
             # The difficult attribute specifies whether a class is ambiguous and by setting its weight to zero it does not contribute to the loss during training 
             weight_vec = torch.ones(20)
 
-            for obj in tree.findall('object'):
-                cls_idx = self.INV_CLASS[obj.find('name').text.strip()]
-                class_vec[cls_idx] = 1
+            for object in tree.findall('object'):
+                class_idx = self.INV_CLASS[object.find('name').text.strip()]
+                class_vec[class_idx] = 1
 
-                difficult = obj.find('difficult')
+                difficult = object.find('difficult')
                 if difficult is not None and int(difficult.text) == 1:
-                    weight_vec[cls_idx] = 0
-
+                    weight_vec[class_idx] = 0
             ######################################################################
             #                            END OF YOUR CODE                        #
             ######################################################################
@@ -102,16 +101,13 @@ class VOCDataset(Dataset):
         ######################################################################
         if os.environ.get('NO_AUG') == '1':
             return []
-
         if self.split != 'trainval':
             return []
 
-        return [
-            transforms.RandomResizedCrop(self.size, scale=(0.7, 1.0)),
-            transforms.RandomHorizontalFlip(),
-            transforms.ColorJitter(brightness=0.2, contrast=0.2,
-                                   saturation=0.2, hue=0.05),
-        ]
+        return [transforms.RandomResizedCrop(self.size, scale=(0.7, 1.0)),
+                transforms.RandomHorizontalFlip(),
+                transforms.ColorJitter(brightness=0.2, contrast=0.2,
+                                        saturation=0.2, hue=0.05),]
         ######################################################################
         #                            END OF YOUR CODE                        #
         ######################################################################

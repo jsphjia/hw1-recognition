@@ -189,15 +189,11 @@ def fcos_apply_deltas_to_locations(
     deltas = deltas.clamp(min=0) * stride
 
     xc, yc = locations[:, 0], locations[:, 1]
-    output_boxes = torch.stack(
-        [
-            xc - deltas[:, 0],
-            yc - deltas[:, 1],
-            xc + deltas[:, 2],
-            yc + deltas[:, 3],
-        ],
-        dim=1,
-    )
+    output_boxes = torch.stack([xc - deltas[:, 0],
+                                yc - deltas[:, 1],
+                                xc + deltas[:, 2],
+                                yc + deltas[:, 3],],
+                                dim=1,)
 
     ##########################################################################
     #                             END OF YOUR CODE                           #
@@ -233,10 +229,8 @@ def fcos_make_centerness_targets(deltas: torch.Tensor):
     ##########################################################################
     left, top, right, bottom = deltas.unbind(dim=1)
 
-    centerness = torch.sqrt(
-        (torch.min(left, right) * torch.min(top, bottom))
-        / (torch.max(left, right) * torch.max(top, bottom))
-    )
+    centerness = torch.sqrt((torch.min(left, right) * torch.min(top, bottom)) 
+                            / (torch.max(left, right) * torch.max(top, bottom)))
 
     background = deltas[:, 0] == -1
     centerness[background] = -1
@@ -291,9 +285,7 @@ def get_fpn_location_coords(
         xc = (xx + 0.5) * level_stride
         yc = (yy + 0.5) * level_stride
 
-        location_coords[level_name] = torch.stack(
-            [xc.reshape(-1), yc.reshape(-1)], dim=1
-        )
+        location_coords[level_name] = torch.stack([xc.reshape(-1), yc.reshape(-1)], dim=1)
         ######################################################################
         #                             END OF YOUR CODE                       #
         ######################################################################

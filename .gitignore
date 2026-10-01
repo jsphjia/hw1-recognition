@@ -1,24 +1,23 @@
-# PASCAL VOC data: ~1.8GB of tarballs and extracted images, re-downloadable
-# with q1_q2_classification/download_data.sh
 data/*
 figures/*
-# ...except the two annotation JSONs that ship with the repo and are tracked.
+
 !data/voc07_train.json
 !data/voc07_val.json
 
-# TensorBoard logs and saved checkpoints
 runs/
 *.pth
 
-# mAP evaluation tool, git-cloned in the Q3 setup step
 detection/mAP/
 detection/detection_logs/
 detection/detection_logs_overfit/
+detection/detection_logs_full/
+detection/mAP_output/
+detection/fcos_detector.pt
 
-# Python / macOS cruft
 __pycache__/
 *.pyc
 .DS_Store
 q2_train.log
+q3_train.log
 runs_q2/
 tsne_features.npz
